@@ -1,5 +1,7 @@
 // data manipulation
 
+const { addStrings, example_array } = require("./chapter-2"); // destructuring syntax
+
 // strings
 let example_sentence = 'this is a string';
 
@@ -113,3 +115,59 @@ const entries_in_object = Object.entries(bio);
 console.log(entries_in_object);
 
 ///* Part 2: Scopes, closures, modular code, and error handling
+function helloWorld() {
+    let sentence = 'hello world';
+    console.log(sentence);
+}
+
+// Closures
+function counter() {
+    let count = 0;
+    console.log("Outer function: ", count);
+    // anonymous function
+    return function () {
+        count++;
+        console.log('Inner function: ', count);
+    }
+}
+let increment = counter(); // increment is the inner function
+increment();
+increment();
+
+// Modular
+
+addStrings('hello', 'world');
+console.log(example_array);
+
+// Error handling techniques & Debugging
+const brokenObject = {
+    word : 'nice'
+}
+
+// The code below is not problematic as it seems :-)
+// function problematicCodeBlock() {
+//     const calculation = 100 / 0; // even 100 / null is infinity
+//     console.log(calculation);
+// }
+
+function problematicCodeBlock() {
+    try {
+        const sub_object = brokenObject.hello.world; // Equivalent to Undefined.world
+        console.log(sub_object);
+    } catch (err) {
+        console.error(err.message); // cleaner than err
+    }
+}
+
+problematicCodeBlock();
+console.log('code continued to execute');
+
+function throwError() {
+    try {
+        throw new Error('custom error message');
+    } catch (err) {
+        console.log(err.message);
+    }
+}
+
+throwError();

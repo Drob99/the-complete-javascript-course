@@ -98,7 +98,7 @@ function addStrings(string1 = 'default1', string2 = 'default2') {
     }
 
     let concatString = string1 + ' ' + string2;
-    // console.log(concatString);
+    console.log(concatString);
     return concatString;
 }
 
@@ -106,4 +106,9 @@ let newString = addStrings('hello');
 console.log('The new string is: ', newString);
 addStrings('hello', 'mum'); // adds Space by default
 addStrings('hello'); // Runs !!!
+
+module.exports = {
+    addStrings,
+    example_array
+}
 
