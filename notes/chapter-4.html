@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DOM Manipulation Practice</title>
+    <!-- <script src="chapter-2.js" defer></script>  -->
 </head>
 <body>
     <h1 id="main-title">DOM Manipulation</h1>
 
-    <form id="form-example">
+    <form id="form-example" onsubmit="return handleSubmitForm(event)">
         <label for="name">Name:</label>
         <input type="text" id="name" name="name"><br><br>
         <label for="age">Age:</label>
@@ -38,13 +39,25 @@
         let modalBtn = document.getElementById('open-modal-btn');
         let closeModalBtn = document.getElementById('close-modal-btn');
         let modal = document.getElementById('modal');
-        let xBtn = document.querySelector('.close'); // css selector
+        let xBtn = document.querySelector('.close'); // css selector selects multiple things like e.g. classes
         let textArea = document.getElementById('text-area');
+        let nameInput = document.getElementById('name');
+        let ageInput = document.getElementById('age');
+
+        let contentArea = document.getElementById('content-area');
+
+        contentArea.innerHTML = '<h1>Hi mom</h1>';
+        let newHTML = document.querySelector('#content-area h1');
+        newHTML.style.background = 'yellow';
+        newHTML.style.color = 'pink';
+        newHTML.style.padding = '100px';
+
 
         function handleOpenModal() {
             // console.log('button is working');
             console.log(textArea.value);
             modal.style.display = 'flex';
+            textArea.value = 'hi mom';
         }
         modalBtn.addEventListener('click', handleOpenModal);
 
@@ -54,6 +67,14 @@
 
         closeModalBtn.addEventListener('click', handleCloseModal);
         xBtn.addEventListener('click', handleCloseModal);
+
+
+        function handleSubmitForm(event) {
+            event.preventDefault();
+            // console.log('attempted to submit the form');
+            console.log('name: ', nameInput.value);
+            console.log('age: ', ageInput.value);
+        }
     </script>
 
 </body>
