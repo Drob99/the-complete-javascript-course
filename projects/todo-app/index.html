@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Press+Start+2P&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            color: #202124;
+        }
+
+        h1,
+        h2,
+        h3,
+        input,
+        button {
+            font-family: 'Press Start 2P', system-ui;
+        }
+
+        body {
+            /* min-height: 100vh; */
+            display: flex;
+            flex-direction: column;
+            padding: 14px;
+            background: #eff6ff;
+            gap: 14px;
+        }
+
+        header {
+            display: flex;
+            align-items: stretch;
+        }
+
+        header,
+        main {
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+            gap: 14px;
+        }
+
+        header input {
+            flex: 1;
+            border-radius: 14px;
+            outline: none;
+            width: 100%;
+        }
+
+        header button {
+            border-radius: 14px;
+            background: transparent;
+            transition-duration: 200ms;
+            cursor: pointer;
+        }
+
+        header button:hover {
+            opacity: 0.7;
+        }
+
+        header button,
+        header input {
+            padding: 14px 18px;
+            border: none;
+            outline: none;
+            background: white;
+        }
+
+        p {
+            font-size: 0.9em;
+        }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .todoItem {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px;
+            border-radius: 14px;
+            background: white;
+        }
+
+        .todoItem p {
+            flex: 1;
+        }
+
+        .actionsContainer {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .actionsContainer button {
+            transition-duration: 200ms;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+        }
+
+        .actionsContainer button:hover {
+            opacity: 0.7;
+        }
+
+
+
+        @media (min-width: 640px) {
+
+            header button,
+            header input {
+                font-size: 1.2em;
+            }
+
+            p {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <input id="todoInput" placeholder="Enter todo ..." />
+        <button id="addBtn">Add</button>
+    </header>
+    <main>
+        <div class="todoItem">
+            <p>Go to the gym</p>
+            <div class="actionsContainer">
+                <button><i class="fa-solid fa-pen-to-square"></i></button>
+                <button><i class="fa-solid fa-trash"></i></button>
+            </div>
+        </div>
+    </main>
+    <script>
+        // step 1 - initialize our list of todos && display the todos
+        // Error handling in case of empty localStorage
+        let todoList = [];
+        const storedData = localStorage.getItem('todoList');
+        if (storedData) {
+            try {
+                todoList = JSON.parse(storedData).todoList || [];
+            } catch (error) {
+                console.error("Error parsing localStorage data:", error);
+                todoList = [];
+            }
+        }
+        let mainContainer = document.querySelector('main')
+
+        function paintUI() {
+            let newInnerHtml = ''
+            for (let i = 0; i < todoList.length; i++) {
+                const todo = todoList[i]
+                newInnerHtml += `
+                <div class="todoItem">
+                    <p>${todo}</p>
+                    <div class="actionsContainer">
+                        <button onclick="editTodo(${i})"><i class="fa-solid fa-pen-to-square"></i></button>
+                        <button onclick="deleteTodo(${i})"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>        
+                `
+            }
+            mainContainer.innerHTML = newInnerHtml
+            saveData()
+        }
+
+        paintUI()
+
+        // step 2 - write a function that allows us to add a new todo
+
+        let addButton = document.getElementById('addBtn')
+        let todoInput = document.getElementById('todoInput')
+
+        function addNewTodo() {
+            let newTodoText = todoInput.value
+            if (!newTodoText)
+                return
+            console.log(todoList);
+            todoList.push(newTodoText)
+            todoInput.value = '' // Empties the input bar after addition
+            paintUI()
+        }
+        addButton.addEventListener('click', addNewTodo)
+
+        // step 3 - write a function that allows us to delete a todo
+
+        function deleteTodo(index) {
+            let newTodoList = todoList.filter((currentValue, currentIndex) => {
+                return currentIndex !== index
+            })
+            todoList = newTodoList
+            paintUI()
+        }
+
+        // step 4 - write a function that allows us to edit a todo
+
+        function editTodo(index) {
+            let currentTodo = todoList[index]
+            todoInput.value = currentTodo
+            deleteTodo(index)
+        }
+
+        // step 5 - save all information
+
+        function saveData() {
+            localStorage.setItem('todoList', JSON.stringify({ todoList }))
+        }
+    </script>
+</body>
+
+</html>
